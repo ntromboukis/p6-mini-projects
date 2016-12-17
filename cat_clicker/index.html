@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cat Clicker</title>
+    <script src="jquerymin.js"></script>
+</head>
+<body>
+<div class="kitten_container">
+    <ul id="kittyList"></ul>
+    <div id="catClickArea"></div>
+</div>
+
+
+<script type="text/javascript">
+
+var kittyUrl = "https://placekitten.com/g/";
+var catName = ['Chewy', 'Charlie', 'Waffles', 'Chip', 'Mila'];
+var catHolder = [];
+
+
+for (i=0; i<5; i++) {
+    var h = 90 * i;
+    var w = 150 * i;
+    var listItem = '<li id="' + catName[i]+'"><a href="#link'+catName[i]+'"</a>'+catName[i]+'</li>';
+
+    catHolder.push({
+        kittyName : catName[i],
+        kittyNameID : '<h2 id="_name' + catName[i] + '">' + catName[i] + '</h2>',
+        kittyPic : '<img id="_pic'+ catName[i] + '" src="' + kittyUrl + h.toString() + '/' + w.toString() + '" alt="kitty">',
+        kittyCountElem : '<p id="_count' + catName[i] + '"></p>',
+        kittyCount : 0});
+
+    $('#kittyList').append(listItem);
+};
+
+console.log(catHolder);
+
+
+$('li').click(function() {
+    var index = $('li').index(this);
+    console.log(index);
+    $('#catClickArea').empty();
+    $('#catClickArea').append(catHolder[index].kittyNameID);
+    $('#catClickArea').append(catHolder[index].kittyPic);
+    $('#catClickArea').append(catHolder[index].kittyCountElem);
+    $('#_count'+catHolder[index].kittyName).text('');
+    $('#_count'+catHolder[index].kittyName).text(catHolder[index].kittyCount);
+    $('#_pic'+ catHolder[index].kittyName).click(function() {
+        $('#_count' + catHolder[index].kittyName).text(parseInt($('#_count' + catHolder[index].kittyName).text()) + 1);
+        catHolder[index].kittyCount++;
+        console.log(catHolder[index].kittyCount);
+    });
+});
+</script>
+
+
+</body>
+</html>
