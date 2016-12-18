@@ -51,11 +51,9 @@ var catView = {
         this.catName = document.getElementById('cat-name');
         this.catPic = document.getElementById('cat-pic');
         this.counter = document.getElementById('cat-counter');
-
         this.catPic.addEventListener('click', function() {
             octopus.incrementCounter();
         })
-
         this.render();
     },
     render: function() {
@@ -70,22 +68,17 @@ var catView = {
 var catListView = {
     init: function() {
         this.list = document.getElementById('kitty-list');
-
         this.render();
     },
 
     render: function() {
         var cat, elem, i;
         var cats = octopus.getCats();
-
         this.list.innerHTML = '';
-
         for (i = 0; i < cats.length; i++) {
             cat = cats[i];
-
             elem = document.createElement('li');
             elem.textContent = cat.catName;
-
             elem.addEventListener('click', (function(catCopy) {
                 return function() {
                     octopus.setCurrentCat(catCopy);
@@ -94,9 +87,7 @@ var catListView = {
             })(cat));
             this.list.appendChild(elem);
         }
-
     }
-
 }
 
 octopus.init();
