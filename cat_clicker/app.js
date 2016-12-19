@@ -28,6 +28,7 @@ var octopus = {
         model.currentCat = model.cats[0];
         catListView.init();
         catView.init();
+        catAdminView.init();
     },
     incrementCounter: function() {
         model.currentCat.count++;
@@ -41,9 +42,31 @@ var octopus = {
     },
     setCurrentCat: function(cat) {
         model.currentCat = cat;
+    },
+    renderAdminPanel: function() {
+        return catAdminView.render();
+    },
+    updateCats: function(name, picUrl) {
+        var resp = '';
+        if (name != null) {
+            model.currentCat.catName = name;
+            resp += 'Updated cat name' + name + '\n';
+        } else {
+            resp += 'Did not update cat name\n';
+        }
+        if (picUrl != null) {
+            model.currentCat.imgURL = picUrl;
+            resp += 'Updated cat pic' + picUrl + '\n';
+        } else {
+            resp += 'Did not update cat pic\n';
+        }
+        octopus.clearAdminSpace();
+        octopus.init();
+    },
+    clearAdminSpace: function() {
+        return catAdminView.clearAdminSpace();
     }
 };
-
 
 var catView = {
     init: function() {
@@ -63,7 +86,6 @@ var catView = {
         this.catPic.src = currentCat.imgURL;
     }
 };
-
 
 var catListView = {
     init: function() {
@@ -90,4 +112,82 @@ var catListView = {
     }
 }
 
+var catAdminView = {
+    init: function() {
+        var adminBtn;
+
+        this.adminSpace = document.getElementById('admin-space');
+
+        adminBtn = document.createElement('button');
+        adminBtn.setAttribute('id', 'admin-btn');
+        adminBtn.textContent = 'Admin';
+        adminBtn.addEventListener('click', function() {
+            octopus.clearAdminSpace();
+            octopus.renderAdminPanel();
+        })
+
+        this.adminSpace.appendChild(adminBtn);
+    },
+    render: function() {
+        var adminPanel, nameForm, urlForm, nameLabel, urlLabel, editBtn, backBtn;
+        var editName, editPic;
+        var currentCat = octopus.getCurrentCat();
+
+        nameLabel = document.createElement('label');
+        nameLabel.setAttribute('id', 'name-label');
+        nameLabel.textContent = 'Cat Name';
+
+        nameForm = document.createElement('input');
+        nameForm.setAttribute('id', 'edit-name');
+        nameForm.setAttribute('value', currentCat.catName);
+
+        urlLabel = document.createElement('label');
+        urlLabel.setAttribute('id', 'url-label');
+        urlLabel.textContent = 'Cat Pic';
+
+        urlForm = document.createElement('input');
+        urlForm.setAttribute('id', 'edit-pic');
+        urlForm.setAttribute('value', currentCat.imgURL);
+
+        editBtn = document.createElement('input');
+        editBtn.setAttribute('type', 'submit');
+        editBtn.setAttribute('name', 'edit-btn');
+        editBtn.addEventListener('click', function() {
+            octopus.updateCats(editName.value, editPic.value);
+        });
+
+        backBtn = document.createElement('button');
+        backBtn.setAttribute('id', 'back-btn');
+        backBtn.textContent = 'Back';
+        backBtn.addEventListener('click', function() {
+            octopus.clearAdminSpace();
+            octopus.init();
+        });
+
+        this.adminSpace.appendChild(nameLabel);
+        this.adminSpace.appendChild(nameForm);
+        this.adminSpace.appendChild(urlLabel);
+        this.adminSpace.appendChild(urlForm);
+        this.adminSpace.appendChild(editBtn);
+        this.adminSpace.appendChild(backBtn);
+
+        editName = document.getElementById('edit-name');
+        editPic = document.getElementById('edit-pic');
+        console.log(editName.value);
+    },
+    clearAdminSpace: function() {
+        var adminSpace = document.getElementById('admin-space');
+        while (adminSpace.firstChild) {
+            adminSpace.removeChild(adminSpace.firstChild);
+        };
+    }
+}
+
 octopus.init();
+
+
+// admin button disappears when pressed
+// replace admin button with back button when console is open
+// set event on click for submit button
+// update info and remove admin panel
+// replace admin button
